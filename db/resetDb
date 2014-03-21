@@ -1,0 +1,71 @@
+use matfol; # connect to right database
+
+#Remove old tables if allready existing
+drop table users; 
+drop table collections; 
+drop table songs; 
+drop table uclink; 
+drop table cslink; 
+
+#Create tables
+create table users (
+userid INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+username VARCHAR(64) NOT NULL,
+firstname VARCHAR(64),
+surname VARCHAR(64),
+registered TIMESTAMP DEFAULT NOW(),
+password VARCHAR(100) NOT NULL
+);
+
+create table collections (
+collectionid INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+title VARCHAR(64) NOT NULL,
+subtitle VARCHAR(64),
+creator INT, #The userid of the creator
+public BOOLEAN #0 = private; 1= public
+);
+
+create table songs (
+songid INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+title VARCHAR(64) NOT NULL,
+lyrics VARCHAR(8000) NOT NULL,
+melody VARCHAR(64),
+composer VARCHAR(64),
+type VARCHAR(64)
+);
+
+create table uclink (
+userid INT NOT NULL,
+collectionid INT NOT NULL,
+PRIMARY KEY (userid, collectionid)
+);
+
+create table cslink (
+collectionid INT NOT NULL,
+songid INT NOT NULL,
+PRIMARY KEY (collectionid, songid)
+);
+
+
+#Create some standard data
+insert into users (username, firstname, surname, password) values ('TestUser1','Test','User1','password');
+
+insert into songs (title, lyrics, melody, composer, type) values ('Happy Birthday','You know it doesn\'t make much sense<br>There ought to be a law against<br>Anyone who takes offense<br>At a day in your celebration<br>\'Cause we all know in our minds<br>That there ought to be a time<br>That we can set aside<br>To show just how much we love you<br>And I\'m sure you would agree<br>It couldn\'t fit more perfectly<br>Than to have a world party on the day you came to be<br>Happy birthday to you<br>Happy birthday to you<br>Happy birthday <br>Happy birthday to you<br>Happy birthday to you<br>Happy birthday','Happy Birthday','Stevie Wonder','Party');
+
+insert into songs (title, lyrics, melody, composer, type) values ('Ett Svin På Maskin','Jag skulle ut och festa,<br>stämningen var god.<br>Då träffa jag en killle<br>som var spikrak som ett lod.<br>Ett svin, ett svin, ett svin<br>ifrån maskin.<br><br>Jag hade inte tid<br>att va¹ barmhärtig samarit.<br>Jag lät honom ligga <br>i sin egen skit.<br>Ett svin, ett svin, ett svin<br>ifrån maskin.<br><br>Ett svin, ett svin, ett svin ifrån maskin.<br>Ett svin, ett svin, ett svin ifrån maskin.<br><br>Jag kom ner på Gasquen,<br>gissa vad jag såg.<br>Bland sina egna spyor <br>på golvet där låg.<br>Ett svin, ett svin, ett svin<br>ifrån maskin.<br><br>En sådan jävla skithög<br>vill ingen bjuda opp.<br>Man vill helst springa bort<br>eller ge honom en propp.<br>Ett svin, ett svin, ett svin<br>ifrån maskin.<br><br>Ett svin, ett svin, ett svin ifrån maskin.<br>Ett svin, ett svin, ett svin ifrån maskin.','Från Oss Alla Till Er Alla','Datalog','Student');
+
+insert into songs (title, lyrics, melody, composer, type) values ('Jag Ska Festa','Jag skall festa, ta det lugnt med spriten<br>ha det roligt utan att va\' full.<br>Inte krypa runt med festeliten,<br>ta det varligt för min egen skull.<br><br>Först en öl i torra strupen,<br>efter det så kommer supen,<br>i med vinet, ner med punschen<br>sist en groggbuffé.<br><br>Jag är skitfull, däckar först av alla<br>missar festen, men vad gör väl dé?<br>Blandar hejdlöst öl och gammal filmjölk,<br>kastar upp på bordsdamen brevé!','Bamse','D-LTH, sångarstriden -87','Party');
+
+insert into collections (title, subtitle, creator, public) values ('Drinking Soup','When your throat feels like pandas',1,1);
+
+insert into collections (title, subtitle, creator, public) values ('Fun in bed','When it\'s business time',1,0);
+
+insert into uclink values (1,1);
+
+insert into uclink values (1,2);
+
+insert into cslink values (1,1);
+
+insert into cslink values (2,2);
+
+insert into cslink values (1,3);

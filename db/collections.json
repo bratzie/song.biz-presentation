@@ -1,0 +1,45 @@
+{
+	"collections": [ {
+		"collectionid": 1,
+		"title": "Drinking Soup",
+		"subtitle": "When your throat feels like pandas",
+		"creator": 5,
+		"ispublic": true
+	}, {
+		"collectionid": 2,
+		"title": "Tha Rude List",
+		"subtitle": "More sandstorms than Sahara",
+		"creator": 4,
+		"ispublic": true
+	}, {
+		"collectionid": 3,
+		"title": "GET PSYCHED MIX",
+		"subtitle": "Certified by Barney Stinson",
+		"creator": 1,
+		"ispublic": true
+	}, {
+		"collectionid": 4,
+		"title": "Boys 2 Girls",
+		"subtitle": "Love and other silly things",
+		"creator": 1,
+		"ispublic": true
+	}, {
+		"collectionid": 5,
+		"title": "I Ate Pasta",
+		"subtitle": "The best Italian sausages",
+		"creator": 2,
+		"ispublic": true
+	}, {
+		"collectionid": 6,
+		"title": "Sensual Smoothness",
+		"subtitle": "Barry White, Barry White, Barry White...",
+		"creator": 2,
+		"ispublic": true
+	}, {
+		"collectionid": 7,
+		"title": "Lucky Number 7",
+		"subtitle": "You will win when listening to this",
+		"creator": 2,
+		"ispublic": true
+	} ]
+}
