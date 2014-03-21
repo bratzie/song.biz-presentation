@@ -463,13 +463,13 @@ function createTestData() {
 	});
 
 	$.getJSON( "./db/users.json", function( users ) {
-		//console.log(users);
+		console.log(users);
 		var i = 0;
 		while(users.users[i] != null) {
 			var user = users.users[i];
 			model.addUser(user.userid, user.username, user.firstname, user.surname, user.password);
 			i++;
-			//console.log(user.userid + ": " + user.username + " added!");
+			console.log(user.userid + ": " + user.username + " added!");
 		}
 	});
 

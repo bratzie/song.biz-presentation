@@ -13,6 +13,19 @@ $(document).ready(function () {
 		searchfilter = $('#searchField').val().toLowerCase();
 		getSearchResults();
 	});
+
+	$('#passfield').keydown(function (e) {
+		var code = (e.keyCode ? e.keyCode : e.which);
+		console.log(code);
+		if(code === 13) {
+			if(current_user == "") {
+				window.location.href = "?user="+$('#userfield').val()+"&password="+$('#passfield').val();
+			}
+		} else {
+			// do nothing if it wasn't enter
+		}
+	});
+
 	$('#searchtype').change(function () {
 		getSearchResults();
 	});

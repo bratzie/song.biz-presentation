@@ -23,5 +23,14 @@
 	}, {
 		"userid": 4,
 		"collectionid": 7
+	}, {
+		"userid": 6,
+		"collectionid": 4
+	}, {
+		"userid": 6,
+		"collectionid": 2
+	}, {
+		"userid": 6,
+		"collectionid": 7
 	} ]
 }
