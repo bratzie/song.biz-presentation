@@ -6,14 +6,75 @@ Execute on start
 
 // this is the instance of the main model
 var model = new Model();
+var DEBUG = false;
 
 $.get('scripts/isConnected.php', {}).done(function(status) {
 	if(status != 'connected') {
 		createTestData();
 	}else{
 		$.get('scripts/loadAll.php', { table: 'songs'}).done(function(data) {
-			alert(data);
+			data = adjustJson('songs', data);
+			var songsJson = $.parseJSON(data);
+			
+			var i = 0;
+			while(songsJson.songs[i] != null) {
+				var song = songsJson.songs[i];
+				model.addSong(song.songid, song.title, song.lyrics, song.melody, song.composer, song.type);
+				i++;
+			}
+
 		});
+
+		$.get('scripts/loadAll.php', { table: 'users'}).done(function(data) {
+			data = adjustJson('users', data);
+			var usersJson = $.parseJSON(data);
+			
+			var i = 0;
+			while(usersJson.users[i] != null) {
+				var user = usersJson.users[i];
+				model.addUser(user.userid, user.username, user.firstname, user.surname, user.password);
+				i++;
+			}
+		});
+
+		$.get('scripts/loadAll.php', { table: 'collections'}).done(function(data) {
+			data = adjustJson('collections', data);
+			var collectionsJson = $.parseJSON(data);
+
+			var i = 0;
+			while(collectionsJson.collections[i] != null) {
+				var collection = collectionsJson.collections[i];
+				model.addCollection(collection.collectionid, collection.title, collection.subtitle, collection.creator, collection.ispublic);
+				i++;
+			}
+			console.log(data);
+		});
+
+		$.get('scripts/loadAll.php', { table: 'cslink'}).done(function(data) {
+			data = adjustJson('cslink', data);
+			var cslinkJson = $.parseJSON(data);
+
+			var i = 0;
+			while(cslinkJson.cslink[i] != null) {
+				var cslink = cslinkJson.cslink[i];
+				model.addSongToCollection(cslink.collectionid, cslink.songid);
+				i++;
+			}
+		});
+
+		$.get('scripts/loadAll.php', { table: 'uclink'}).done(function(data) {
+			data = adjustJson('uclink', data);
+			var cslinkJson = $.parseJSON(data);
+			
+			
+			var i = 0;
+			while(cslinkJson.uclink[i] != null) {
+				var uclink = cslinkJson.uclink[i];
+				model.addCollectionToUser(uclink.userid, uclink.collectionid);
+				i++;
+			}
+		});
+
 	}
 });
 
@@ -117,7 +178,9 @@ function Collection(id, title, subtitle, creator, isPublic) {
 
 	this.addSong = function(songid) {
 		_songs.push(songid);
-		console.log("Song " + songid + " added to collection " + this.getId());
+		if(DEBUG){
+			console.log("Song " + songid + " added to collection " + this.getId());
+		}
 		model.notifyObservers();
 	}
 
@@ -125,7 +188,9 @@ function Collection(id, title, subtitle, creator, isPublic) {
 		var index = _songs.indexOf(songid);
 		if(index > -1) {
 			_songs.splice(index,1);
-			console.log("Song " + songid + " removed from collection " + this.getId());
+			if(DEBUG){
+				console.log("Song " + songid + " removed from collection " + this.getId());
+			}
 			model.notifyObservers();
 		}
 	}
@@ -145,7 +210,13 @@ function Collection(id, title, subtitle, creator, isPublic) {
 	this.getCreator = function() { return _creator; }
 
 	this.setIsPublic = function(isPublic) {
-		_isPublic = isPublic;
+		if(isPublic==1){
+			_isPublic = true;
+		} else if(isPublic == 0){
+			_isPublic = false;
+		} else{
+			_isPublic = isPublic;
+		}
 		model.notifyObservers();
 	}
 
@@ -218,7 +289,9 @@ function User(id, username, firstname, surname, joined, password) {
 	// used to add a collectionid to this user
 	this.addCollection = function(collectionid) {
 		_collections.push(collectionid);
-		console.log("Collection " + collectionid + " added to user " + this.getUsername());
+		if(DEBUG){
+			console.log("Collection " + collectionid + " added to user " + this.getUsername());
+		}
 		model.notifyObservers();
 	}
 
@@ -227,7 +300,9 @@ function User(id, username, firstname, surname, joined, password) {
 		var index = _collections.indexOf(collectionid);
 		if(index > -1) {
 			_collections.splice(index,1);
-			console.log("Collection " + collectionid + " removed from user " + this.getUsername());
+			if(DEBUG){
+				console.log("Collection " + collectionid + " removed from user " + this.getUsername());
+			}
 			model.notifyObservers();
 		}
 	}
@@ -364,7 +439,8 @@ function Model () {
 	this.getCollectionById = function (collectionid) {
 		var i = 0;
 		while (this.collections[i] != null) {
-			if (this.collections[i].getId() === collectionid) {
+			console.log(this.collections[i] + " " + this.collections[i].getId() + " " + collectionid);
+			if (this.collections[i].getId() == collectionid) {
 				return this.collections[i];
 			} 
 			i++;
@@ -436,6 +512,19 @@ function Model () {
 		    listeners.push(listener);
 	};
 	//*** END OBSERVABLE PATTERN ***
+}
+
+
+/*********************************************
+Manipulate DBData
+*********************************************/
+
+function adjustJson(tableName, json) {
+	prefix = "{	\""+tableName+"\":";
+	sufix = "}";
+	return prefix + json + sufix;
+
+
 }
 
 
