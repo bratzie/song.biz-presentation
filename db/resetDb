@@ -66,7 +66,6 @@ insert into collections (title, subtitle, creator, public) values ('Fun in bed',
 insert into collections (title, subtitle, creator, public) values ('AWESOME SONGS OF LOVE','For those lovely moments',2,0);
 
 
-
 insert into uclink values (1,1);
 
 insert into uclink values (1,2);

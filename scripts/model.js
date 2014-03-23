@@ -47,7 +47,6 @@ $.get('scripts/isConnected.php', {}).done(function(status) {
 				model.addCollection(collection.collectionid, collection.title, collection.subtitle, collection.creator, collection.ispublic);
 				i++;
 			}
-			console.log(data);
 		});
 
 		$.get('scripts/loadAll.php', { table: 'cslink'}).done(function(data) {
@@ -74,7 +73,6 @@ $.get('scripts/isConnected.php', {}).done(function(status) {
 				i++;
 			}
 		});
-
 	}
 });
 
@@ -439,7 +437,6 @@ function Model () {
 	this.getCollectionById = function (collectionid) {
 		var i = 0;
 		while (this.collections[i] != null) {
-			console.log(this.collections[i] + " " + this.collections[i].getId() + " " + collectionid);
 			if (this.collections[i].getId() == collectionid) {
 				return this.collections[i];
 			} 
@@ -552,13 +549,13 @@ function createTestData() {
 	});
 
 	$.getJSON( "./db/users.json", function( users ) {
-		console.log(users);
+		// console.log(users);
 		var i = 0;
 		while(users.users[i] != null) {
 			var user = users.users[i];
 			model.addUser(user.userid, user.username, user.firstname, user.surname, user.password);
 			i++;
-			console.log(user.userid + ": " + user.username + " added!");
+			// console.log(user.userid + ": " + user.username + " added!");
 		}
 	});
 
