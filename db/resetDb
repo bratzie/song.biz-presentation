@@ -1,11 +1,13 @@
 use matfol; # connect to right database
+DEFAULT CHARACTER SET utf8;
 
-#Remove old tables if allready existing
-drop table users; 
+#Remove old tables if already existing
+
 drop table collections; 
 drop table songs; 
 drop table uclink; 
 drop table cslink; 
+drop table users; 
 
 #Create tables
 create table users (
@@ -49,6 +51,7 @@ PRIMARY KEY (collectionid, songid)
 
 #Create some standard data
 insert into users (username, firstname, surname, password) values ('TestUser1','Test','User1','password');
+insert into users (username, firstname, surname, password) values ('Mattias','Mattias','Folke','12345');
 
 insert into songs (title, lyrics, melody, composer, type) values ('Happy Birthday','You know it doesn\'t make much sense<br>There ought to be a law against<br>Anyone who takes offense<br>At a day in your celebration<br>\'Cause we all know in our minds<br>That there ought to be a time<br>That we can set aside<br>To show just how much we love you<br>And I\'m sure you would agree<br>It couldn\'t fit more perfectly<br>Than to have a world party on the day you came to be<br>Happy birthday to you<br>Happy birthday to you<br>Happy birthday <br>Happy birthday to you<br>Happy birthday to you<br>Happy birthday','Happy Birthday','Stevie Wonder','Party');
 
@@ -60,9 +63,15 @@ insert into collections (title, subtitle, creator, public) values ('Drinking Sou
 
 insert into collections (title, subtitle, creator, public) values ('Fun in bed','When it\'s business time',1,0);
 
+insert into collections (title, subtitle, creator, public) values ('AWESOME SONGS OF LOVE','For those lovely moments',2,0);
+
+
+
 insert into uclink values (1,1);
 
 insert into uclink values (1,2);
+
+insert into uclink values (2,3);
 
 insert into cslink values (1,1);
 
