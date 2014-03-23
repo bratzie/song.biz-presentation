@@ -12,7 +12,7 @@ $(document).ready(function () {
 	setTimeout(updateActiveCollection, 500);
 
 	$('#collectionsongs').droppable({ accept: ".card.song", drop: function (event, ui) {
-		model.getCollectionById(activecollection).addSong(parseInt(ui.draggable.attr('data-songid')));
+		model.addSongToCollection(activecollection,parseInt(ui.draggable.attr('data-songid')));
 		$('#collectionsongs').fadeOut(100, function () { update(); $('#collectionsongs').fadeIn(100); });
 	} });
 

@@ -4,12 +4,17 @@
 Execute on start
 ***************************************/
 
-// this is the instance of the main model
+//Class variables
 var model = new Model();
 var DEBUG = false;
+var LOAD_DB_SONGS = true;
+var LOAD_DB_USERS = true;
+var LOAD_DB_COLLECTIONS = true;
+var LOAD_DB_CSLINK = true;
+var LOAD_DB_UCLINK = true;
 
 $.get('scripts/isConnected.php', {}).done(function(status) {
-	if(status != 'connected') {
+	if(status != 'LOL REMOVE ME WHEN YOU WANT TO SYNC WITH DB connected') {
 		createTestData();
 	}else{
 		$.get('scripts/loadAll.php', { table: 'songs'}).done(function(data) {
@@ -22,58 +27,73 @@ $.get('scripts/isConnected.php', {}).done(function(status) {
 				model.addSong(song.songid, song.title, song.lyrics, song.melody, song.composer, song.type);
 				i++;
 			}
-
+			LOAD_DB_SONGS = false;
 		});
 
-		$.get('scripts/loadAll.php', { table: 'users'}).done(function(data) {
-			data = adjustJson('users', data);
-			var usersJson = $.parseJSON(data);
-			
+		$.getJSON( "./db/users.json", function( users ) {
 			var i = 0;
-			while(usersJson.users[i] != null) {
-				var user = usersJson.users[i];
+			while(users.users[i] != null) {
+				var user = users.users[i];
 				model.addUser(user.userid, user.username, user.firstname, user.surname, user.password);
 				i++;
+				// console.log(user.userid + ": " + user.username + " added!");
 			}
 		});
 
-		$.get('scripts/loadAll.php', { table: 'collections'}).done(function(data) {
-			data = adjustJson('collections', data);
-			var collectionsJson = $.parseJSON(data);
+		// $.get('scripts/loadAll.php', { table: 'users'}).done(function(data) {
+		// 	data = adjustJson('users', data);
+		// 	var usersJson = $.parseJSON(data);
+		// 	console.log(data);
 
-			var i = 0;
-			while(collectionsJson.collections[i] != null) {
-				var collection = collectionsJson.collections[i];
-				model.addCollection(collection.collectionid, collection.title, collection.subtitle, collection.creator, collection.ispublic);
-				i++;
-			}
-		});
+		// 	var i = 0;
+		// 	while(usersJson.users[i] != null) {
+		// 		var user = usersJson.users[i];
+		// 		model.addUser(user.userid, user.username, user.firstname, user.surname, user.password);
+		// 		i++;
+		// 	}
+		// 	LOAD_DB_USERS = false;
+		// });
 
-		$.get('scripts/loadAll.php', { table: 'cslink'}).done(function(data) {
-			data = adjustJson('cslink', data);
-			var cslinkJson = $.parseJSON(data);
+$.get('scripts/loadAll.php', { table: 'collections'}).done(function(data) {
+	data = adjustJson('collections', data);
+	var collectionsJson = $.parseJSON(data);
 
-			var i = 0;
-			while(cslinkJson.cslink[i] != null) {
-				var cslink = cslinkJson.cslink[i];
-				model.addSongToCollection(cslink.collectionid, cslink.songid);
-				i++;
-			}
-		});
-
-		$.get('scripts/loadAll.php', { table: 'uclink'}).done(function(data) {
-			data = adjustJson('uclink', data);
-			var cslinkJson = $.parseJSON(data);
-			
-			
-			var i = 0;
-			while(cslinkJson.uclink[i] != null) {
-				var uclink = cslinkJson.uclink[i];
-				model.addCollectionToUser(uclink.userid, uclink.collectionid);
-				i++;
-			}
-		});
+	var i = 0;
+	while(collectionsJson.collections[i] != null) {
+		var collection = collectionsJson.collections[i];
+		model.addCollection(collection.collectionid, collection.title, collection.subtitle, collection.creator, collection.ispublic);
+		i++;
 	}
+	LOAD_DB_COLLECTIONS = false;
+});
+
+$.get('scripts/loadAll.php', { table: 'cslink'}).done(function(data) {
+	data = adjustJson('cslink', data);
+	var cslinkJson = $.parseJSON(data);
+
+	var i = 0;
+	while(cslinkJson.cslink[i] != null) {
+		var cslink = cslinkJson.cslink[i];
+		model.addSongToCollection(cslink.collectionid, cslink.songid);
+		i++;
+	}
+	LOAD_DB_CSLINK = false;
+});
+
+$.get('scripts/loadAll.php', { table: 'uclink'}).done(function(data) {
+	data = adjustJson('uclink', data);
+	var cslinkJson = $.parseJSON(data);
+
+
+	var i = 0;
+	while(cslinkJson.uclink[i] != null) {
+		var uclink = cslinkJson.uclink[i];
+		model.addCollectionToUser(uclink.userid, uclink.collectionid);
+		i++;
+	}
+	LOAD_DB_UCLINK = false;
+});
+}
 });
 
 /***************************************
@@ -259,7 +279,9 @@ function User(id, username, firstname, surname, joined, password) {
 		model.notifyObservers();
 	}
 
-	this.getUsername = function() { return _username; }
+	this.getUsername = function(){ 
+		return _username;
+	};
 
 	this.setFirstname = function(firstname) {
 		_firstname = firstname;
@@ -336,7 +358,13 @@ function Model () {
 		this.songs.push(song);
 		this.notifyObservers();
 
+
+
 		// SAVE THIS TO DATABASE!
+		if(!LOAD_DB_SONGS){
+			$.get('scripts/insertToDB.php', { table: 'songs', title: title, lyrics: lyrics, melody: melody, composer: composer, type: type }).done();
+		}
+
 	}
 
 	this.addCollection = function (id, title, subtitle, creator, isPublic) {
@@ -356,6 +384,10 @@ function Model () {
 		this.notifyObservers();
 
 		// SAVE THIS TO DATABASE!
+		if(!LOAD_DB_COLLECTIONS){
+			$.get('scripts/insertToDB.php', { table: 'collections', title: title, subtitle: subtitle, creator: creator, isPublic: isPublic}).done();
+		}
+
 	}
 
 	this.addUser = function (id, username, firstname, surname, password) {
@@ -368,13 +400,16 @@ function Model () {
 		this.notifyObservers;
 
 		// SAVE THIS TO DATABASE!
+		if(!LOAD_DB_USERS){
+			$.get('scripts/insertToDB.php', { table: 'users', username: username, firstname: firstname, surname: surname, password: password}).done();
+		}
 	}
 
 	/* MANIPULATING COLLECTIONS (ADD, REMOVE SONGS/USERS) */
 	this.addSongToCollection = function (collectionid, songid) {
 		var i = 0;
 		while (this.collections[i] != null) {
-			if (this.collections[i].getId() === collectionid) {
+			if (this.collections[i].getId() == collectionid) {
 				this.collections[i].addSong(songid);
 				break; // song added, we can take a break, chill and stuff.
 			} 
@@ -382,12 +417,16 @@ function Model () {
 		}
 
 		// SAVE THIS TO DATABASE!
+		if(!LOAD_DB_CSLINK){
+			alert("hit");
+			$.get('scripts/insertToDB.php', { table: 'cslink', collectionid: collectionid, songid: songid }).done();
+		}
 	}
 
 	this.removeSongFromCollection = function (collectionid, songid) {
 		var i = 0;
 		while (this.collections[i] != null) {
-			if (this.collections[i].getId() === collectionid) {
+			if (this.collections[i].getId() == collectionid) {
 				this.collections[i].removeSong(songid);
 				break; // song removed, we can take a break, chill and stuff.
 			} 
@@ -400,7 +439,7 @@ function Model () {
 	this.addCollectionToUser = function (userid, collectionid) {
 		var i = 0;
 		while (this.users[i] != null) {
-			if (this.users[i].getId() === userid) {
+			if (this.users[i].getId() == userid) {
 				this.users[i].addCollection(collectionid);
 				break; // collection added, we can take a break, chill and stuff.
 			} 
@@ -413,7 +452,7 @@ function Model () {
 	this.removeCollectionFromUser = function (userid, collectionid) {
 		var i = 0;
 		while (this.users[i] != null) {
-			if (this.users[i].getId() === userid) {
+			if (this.users[i].getId() == userid) {
 				this.users[i].removeCollection(collectionid);
 				break; // collection added, we can take a break, chill and stuff.
 			} 
@@ -427,7 +466,7 @@ function Model () {
 	this.getSongById = function (songid) {
 		var i = 0;
 		while (this.songs[i] != null) {
-			if (this.songs[i].getId() === songid) {
+			if (this.songs[i].getId() == songid) {
 				return this.songs[i];
 			} 
 			i++;
@@ -447,7 +486,7 @@ function Model () {
 	this.getUserById = function (userid) {
 		var i = 0;
 		while (this.users[i] != null) {
-			if (this.users[i].getId() === userid) {
+			if (this.users[i].getId() == userid) {
 				return this.users[i];
 			} 
 			i++;
