@@ -33,6 +33,7 @@ function update() {
 	getSearchResults();
 	populateUserCollections();
 	updateActiveCollection();
+	fillBrowse();
 }
 
 function trylogin() {
@@ -53,6 +54,12 @@ function trylogin() {
 	if(!flag) {
 		$('#user').html('<input id="userfield" name="user" type="text" placeholder="Username"><input id="passfield" name="password" type="password" placeholder="Password">');
 		$('#user_thing').html("LOGIN");
+
+		$('#a3').html('');
+		$('#b1').html('');
+		$('#b3').html('');
+		$('#c1').html('');
+		$('#c3').html('');
 	}
 }
 
@@ -148,13 +155,14 @@ function getSearchResults() {
 //Adding all songs which has a category.
 
 function fillBrowse() {
+	$('#browse').html('');
 	types = model.getAllTypesOfSongs();
 	var browse = document.getElementById("browse");
 	for (var i = 0; i < types.length; i++) {
 		var head = document.createElement('h2');
 		head.innerHTML = types[i].toUpperCase();
 		var div = document.createElement('div');
-		div.setAttribute("id",types[i].toLowerCase());
+		div.setAttribute("id",types[i].toLowerCase().replace(" ",""));
 		browse.appendChild(head);
 		browse.appendChild(div);
 	};
@@ -162,7 +170,7 @@ function fillBrowse() {
 	for (var i = model.songs.length - 1; i >= 0; i--) {
 		var type = model.songs[i].getType();
 		// $('#'+type.toLowerCase()).html('');
-		var holder = $('#'+type.toLowerCase());
+		var holder = $('#'+type.toLowerCase().replace(" ",""));
 		holder.append('<div data-songid="'+model.songs[i].getId()+'" class="card song"><h1>'+model.songs[i].getTitle()+'</h1><div class="more"><h2>Kompositör: '+model.songs[i].getComposer()+'<br> Melodi: '+model.songs[i].getMelody()+'</h2><p>'+model.songs[i].getLyrics()+'</p></div></div>');
 	};
 
