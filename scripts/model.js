@@ -14,7 +14,7 @@ var LOAD_DB_CSLINK = true;
 var LOAD_DB_UCLINK = true;
 
 $.get('scripts/isConnected.php', {}).done(function(status) {
-	if(status != 'NOT RIGHT NOW, MOCKE THE DATA! connected') {
+	if(status != 'TROLOLOLOLOLLOLOLLOOLLOL connected') {
 		createTestData();
 	}else{
 		$.get('scripts/loadAll.php', { table: 'songs'}).done(function(data) {
@@ -454,6 +454,9 @@ function Model () {
 		}
 
 		// SAVE THIS TO DATABASE!
+		if(!LOAD_DB_UCLINK){
+			$.get('scripts/insertToDB.php', { table: 'uclink', userid: userid, collectionid: collectionid }).done();
+		}
 	}
 
 	this.removeCollectionFromUser = function (userid, collectionid) {
@@ -467,6 +470,9 @@ function Model () {
 		}
 
 		// SAVE THIS TO DATABASE!
+		if(!LOAD_DB_UCLINK){
+			$.get('scripts/removeFromDB.php', { table: 'cslink', userid : userid, collectionid: collectionid }).done();
+		}
 	}
 
 	/* GET OBJECTS BY ID */
@@ -540,6 +546,21 @@ function Model () {
 		this.notifyObservers();
 
 		// SAVE THIS TO DATABASE!
+		if(!LOAD_DB_USERS){
+			$.get('scripts/removeAllFromDB.php', { table: 'users'}).done();
+		}
+		if(!LOAD_DB_COLLECTIONS){
+			$.get('scripts/removeAllFromDB.php', { table: 'collections'}).done();
+		}
+		if(!LOAD_DB_SONGS){
+			$.get('scripts/removeAllFromDB.php', { table: 'songs'}).done();
+		}
+		if(!LOAD_DB_CSLINK){
+			$.get('scripts/removeAllFromDB.php', { table: 'cslink'}).done();
+		}
+		if(!LOAD_DB_UCLINK){
+			$.get('scripts/removeAllFromDB.php', { table: 'cuclink'}).done();
+		}
 	}
 
 	//*** OBSERVABLE PATTERN ***

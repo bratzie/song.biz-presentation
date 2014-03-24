@@ -18,7 +18,7 @@ To add a song the following indata is required:
 songid
 */
 if($table == "songs"){
-	mysqli_query($link,"DELETE FROM songs WHERE songid=$_GET[songid]");
+	mysqli_query($link,"DELETE FROM songs");
 }
 
 /*
@@ -26,7 +26,7 @@ To add a collection the following indata is required:
 collectionid
 */
 if($table == "collections"){
-	mysqli_query($link,"DELETE FROM collections WHERE collectionid=$_GET[collectionid]");
+	mysqli_query($link,"DELETE FROM collections");
 }
 
 /*
@@ -34,7 +34,7 @@ To add a song the following indata is required:
 userid
 */
 if($table == "users"){
-	mysqli_query($link,"DELETE FROM users WHERE userid=$_GET[userid]");
+	mysqli_query($link,"DELETE FROM users");
 }
 
 /*
@@ -43,7 +43,7 @@ collectionid
 songid
 */
 if($table == "cslink"){
-	mysqli_query($link,"DELETE FROM cslink WHERE collectionid=$_GET[collectionid] AND songid=$_GET[songid]");
+	mysqli_query($link,"DELETE FROM cslink");
 }
 /*
 To add a song the following indata is required:
@@ -51,7 +51,7 @@ userid
 collectionid
 */
 if($table == "uclink"){
-	mysqli_query($link,"DELETE FROM uclink WHERE collectionid=$_GET[collectionid] AND userid=$_GET[userid]");
+	mysqli_query($link,"DELETE FROM uclink");
 }
 
 /* close connection */
