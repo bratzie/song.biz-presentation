@@ -14,7 +14,7 @@ var LOAD_DB_CSLINK = true;
 var LOAD_DB_UCLINK = true;
 
 $.get('scripts/isConnected.php', {}).done(function(status) {
-	if(status != 'Troll not nej, ta bort mig sen! connected') {
+	if(status != 'connected') {
 		createTestData();
 	}else{
 		$.get('scripts/loadAll.php', { table: 'songs'}).done(function(data) {
@@ -422,7 +422,7 @@ function Model () {
 					}
 				};
 				if(!exists){
-				this.collections[i].addSong(songid);
+					this.collections[i].addSong(songid);
 				}
 				break; // song added, we can take a break, chill and stuff.
 			} 
@@ -569,6 +569,19 @@ function Model () {
 		if(!LOAD_DB_UCLINK){
 			$.get('scripts/removeAllFromDB.php', { table: 'cuclink'}).done();
 		}
+	}
+
+	/* Get all types of the songs that is represented in the songs*/
+	this.getAllTypesOfSongs = function () {
+		var allTypes = [];
+		for (var i = this.songs.length - 1; i >= 0; i--) {
+			allTypes.push(this.songs[i].getType());
+		}
+		var uniqueTypes = [];
+		$.each(allTypes, function(i, el){
+			if($.inArray(el, uniqueTypes) === -1) uniqueTypes.push(el);
+		});
+		return uniqueTypes;
 	}
 
 	//*** OBSERVABLE PATTERN ***

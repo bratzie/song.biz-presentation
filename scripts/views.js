@@ -97,7 +97,6 @@ function updateActiveCollection() {
 
 	songs.forEach(function (songid) {
 		var song = model.getSongById(songid);
-		console.log("Song id: "+ song.getId());
 		var mystring = '<div data-songid="'+song.getId()+'" class="small card collsongcard"><h1>'+song.getTitle()+'</h1></div>';
 		$('#collectionsongs').append(mystring);
 	});
@@ -148,6 +147,7 @@ function getSearchResults() {
 //Function for putting stuff in the browse view
 
 function fillBrowse() {
+	model.getAllTypesOfSongs();
 	$('#browseStudent').html('');
 	var students = $('#browseStudent');
 	var count = 0;
