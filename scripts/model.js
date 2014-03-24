@@ -14,7 +14,7 @@ var LOAD_DB_CSLINK = true;
 var LOAD_DB_UCLINK = true;
 
 $.get('scripts/isConnected.php', {}).done(function(status) {
-	if(status != 'TROLOLOLOLOLLOLOLLOOLLOL connected') {
+	if(status != 'connected') {
 		createTestData();
 	}else{
 		$.get('scripts/loadAll.php', { table: 'songs'}).done(function(data) {
@@ -413,16 +413,24 @@ function Model () {
 	/* MANIPULATING COLLECTIONS (ADD, REMOVE SONGS/USERS) */
 	this.addSongToCollection = function (collectionid, songid) {
 		var i = 0;
+		var exists = false;
 		while (this.collections[i] != null) {
 			if (this.collections[i].getId() == collectionid) {
+				for (var j = this.collections[i].getSongs().length - 1; j >= 0; j--) {
+					if(this.collections[i].getSongs()[j] == songid) {
+						exists = true;
+					}
+				};
+				if(!exists){
 				this.collections[i].addSong(songid);
+				}
 				break; // song added, we can take a break, chill and stuff.
 			} 
 			i++;
 		}
 
 		// SAVE THIS TO DATABASE!
-		if(!LOAD_DB_CSLINK){
+		if(!LOAD_DB_CSLINK && !exists){
 			$.get('scripts/insertToDB.php', { table: 'cslink', collectionid: collectionid, songid: songid }).done();
 		}
 	}
