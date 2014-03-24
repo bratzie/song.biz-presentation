@@ -59,7 +59,7 @@ $(document).ready(function () {
 		var melody = $('#songMelody').val();
 		var composer = $('#songComposer').val();
 		var type = $('#songType').val();
-		var songId = model.getHighestSongId() + 1;
+		var songId = parseInt(model.getHighestSongId()) + 1;
 
 		if(title !== "" || lyrics !== "" || melody !== "" || composer !== "" || type !== "") {
 			model.addSong(songId, title, lyrics, melody, composer, type);

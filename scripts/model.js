@@ -14,7 +14,7 @@ var LOAD_DB_CSLINK = true;
 var LOAD_DB_UCLINK = true;
 
 $.get('scripts/isConnected.php', {}).done(function(status) {
-	if(status != 'connected') {
+	if(status != 'Troll not nej, ta bort mig sen! connected') {
 		createTestData();
 	}else{
 		$.get('scripts/loadAll.php', { table: 'songs'}).done(function(data) {

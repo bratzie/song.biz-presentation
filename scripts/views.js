@@ -5,11 +5,11 @@ $(document).ready(function () {
 	searchfilter="";
 	activecollection = 1;
 
-	setTimeout(trylogin, 200);
+	setTimeout(trylogin, 800);
 	setTimeout(getSearchResults, 200);
 	setTimeout(fillBrowse, 200);
-	setTimeout(populateUserCollections, 400);
-	setTimeout(updateActiveCollection, 500);
+	setTimeout(populateUserCollections, 1000);
+	setTimeout(updateActiveCollection, 1100);
 
 	$('#collectionsongs').droppable({ accept: ".card.song", drop: function (event, ui) {
 		model.addSongToCollection(activecollection,parseInt(ui.draggable.attr('data-songid')));
@@ -18,7 +18,7 @@ $(document).ready(function () {
 
 	$('#trash').droppable({ accept: ".collsongcard", drop: function (event, ui) {
 		model.removeSongFromCollection(activecollection,parseInt(ui.draggable.attr('data-songid')));
-		$('#collectionsongs').fadeOut(100, function () { update(); $('#collectionsongs').fadeIn(100); $('#trash').css("opacity", "0.2");});		
+		$('#collectionsongs').fadeOut(100, function () { update(); $('#collectionsongs').fadeIn(100);});		
 	} });
 
 	// Make collections dropable
@@ -97,6 +97,7 @@ function updateActiveCollection() {
 
 	songs.forEach(function (songid) {
 		var song = model.getSongById(songid);
+		console.log("Song id: "+ song.getId());
 		var mystring = '<div data-songid="'+song.getId()+'" class="small card collsongcard"><h1>'+song.getTitle()+'</h1></div>';
 		$('#collectionsongs').append(mystring);
 	});
