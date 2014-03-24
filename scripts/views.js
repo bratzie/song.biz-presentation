@@ -17,8 +17,8 @@ $(document).ready(function () {
 	} });
 
 	$('#trash').droppable({ accept: ".collsongcard", drop: function (event, ui) {
-		model.getCollectionById(activecollection).removeSong(parseInt(ui.draggable.attr('data-songid')));
-		$('#collectionsongs').fadeOut(100, function () { update(); $('#collectionsongs').fadeIn(100); $('#trash').css("opacity", "0.2");});
+		model.removeSongFromCollection(activecollection,parseInt(ui.draggable.attr('data-songid')));
+		$('#collectionsongs').fadeOut(100, function () { update(); $('#collectionsongs').fadeIn(100); $('#trash').css("opacity", "0.2");});		
 	} });
 
 	// Make collections dropable

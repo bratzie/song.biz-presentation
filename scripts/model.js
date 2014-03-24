@@ -14,7 +14,7 @@ var LOAD_DB_CSLINK = true;
 var LOAD_DB_UCLINK = true;
 
 $.get('scripts/isConnected.php', {}).done(function(status) {
-	if(status != 'LOL REMOVE ME WHEN YOU WANT TO SYNC WITH DB connected') {
+	if(status != 'NOT RIGHT NOW, MOCKE THE DATA! connected') {
 		createTestData();
 	}else{
 		$.get('scripts/loadAll.php', { table: 'songs'}).done(function(data) {
@@ -203,7 +203,12 @@ function Collection(id, title, subtitle, creator, isPublic) {
 	}
 
 	this.removeSong = function(songid) {
-		var index = _songs.indexOf(songid);
+		var index = -1;
+		for (var i = _songs.length - 1; i >= 0; i--) {
+			if(_songs[i] == songid){
+				index = i;
+			}
+		};		
 		if(index > -1) {
 			_songs.splice(index,1);
 			if(DEBUG){
@@ -418,7 +423,6 @@ function Model () {
 
 		// SAVE THIS TO DATABASE!
 		if(!LOAD_DB_CSLINK){
-			alert("hit");
 			$.get('scripts/insertToDB.php', { table: 'cslink', collectionid: collectionid, songid: songid }).done();
 		}
 	}
@@ -434,6 +438,9 @@ function Model () {
 		}
 
 		// SAVE THIS TO DATABASE!
+		if(!LOAD_DB_CSLINK){
+			$.get('scripts/removeFromDB.php', { table: 'cslink', collectionid: collectionid, songid: songid }).done();
+		}
 	}
 
 	this.addCollectionToUser = function (userid, collectionid) {
