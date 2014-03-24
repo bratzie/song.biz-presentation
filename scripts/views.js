@@ -62,8 +62,8 @@ function populateUserCollections() {
 	if(userid) {
 		var collections = model.getUserById(userid).getCollections();
 		var roof = collections.length;	
-	
-	
+
+
 		for(var i=0; i<roof; i++) {
 			var coll = model.getCollectionById(collections[i]);
 
@@ -145,45 +145,26 @@ function getSearchResults() {
 }
 
 //Function for putting stuff in the browse view
+//Adding all songs which has a category.
 
 function fillBrowse() {
-	model.getAllTypesOfSongs();
-	$('#browseStudent').html('');
-	var students = $('#browseStudent');
-	var count = 0;
-	var roof = model.songs.length;
-	for(var i=0; i<roof; i++) {
-		if(count < 3) {
-			if(model.songs[i].getType().toLowerCase()==='student') {
-				students.append('<div data-songid="'+model.songs[i].getId()+'" class="card song"><h1>'+model.songs[i].getTitle()+'</h1><div class="more"><h2>Kompositör: '+model.songs[i].getComposer()+'<br> Melodi: '+model.songs[i].getMelody()+'</h2><p>'+model.songs[i].getLyrics()+'</p></div></div>');
-				count++;
-			}
-		}
-	}
+	types = model.getAllTypesOfSongs();
+	var browse = document.getElementById("browse");
+	for (var i = 0; i < types.length; i++) {
+		var head = document.createElement('h2');
+		head.innerHTML = types[i].toUpperCase();
+		var div = document.createElement('div');
+		div.setAttribute("id",types[i].toLowerCase());
+		browse.appendChild(head);
+		browse.appendChild(div);
+	};
 
-	$('#browseParty').html('');
-	var partys = $('#browseParty');
-	count = 0;
-	for(var i=0; i<roof; i++) {
-		if(count < 3) {
-			if(model.songs[i].getType().toLowerCase()==='party') {
-				partys.append('<div data-songid="'+model.songs[i].getId()+'" class="card song"><h1>'+model.songs[i].getTitle()+'</h1><div class="more"><h2>Kompositör: '+model.songs[i].getComposer()+'<br> Melodi: '+model.songs[i].getMelody()+'</h2><p>'+model.songs[i].getLyrics()+'</p></div></div>');
-				count++;
-			}
-		}
-	}
-
-	$('#browseNa').html('');
-	var nas = $('#browseNa');
-	count = 0;
-	for(var i=0; i<roof; i++) {
-		if(count < 3) {
-			if(model.songs[i].getType().toLowerCase()==='national anthem') {
-				nas.append('<div data-songid="'+model.songs[i].getId()+'" class="card song"><h1>'+model.songs[i].getTitle()+'</h1><div class="more"><h2>Kompositör: '+model.songs[i].getComposer()+'<br> Melodi: '+model.songs[i].getMelody()+'</h2><p>'+model.songs[i].getLyrics()+'</p></div></div>');
-				count++;
-			}
-		}
-	}
+	for (var i = model.songs.length - 1; i >= 0; i--) {
+		var type = model.songs[i].getType();
+		// $('#'+type.toLowerCase()).html('');
+		var holder = $('#'+type.toLowerCase());
+		holder.append('<div data-songid="'+model.songs[i].getId()+'" class="card song"><h1>'+model.songs[i].getTitle()+'</h1><div class="more"><h2>Kompositör: '+model.songs[i].getComposer()+'<br> Melodi: '+model.songs[i].getMelody()+'</h2><p>'+model.songs[i].getLyrics()+'</p></div></div>');
+	};
 
 	$('.card.song').draggable({ revert: "invalid", helper: "clone", start: function(e, ui) { $(ui.helper).addClass("ui-draggable-helper"); } });
 	$('.card.song').draggable("option", "cursorAt", { left: 5 });

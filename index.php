@@ -102,18 +102,7 @@ else {
                     </div>
                     <!--Browse-->
                     <div id="browse" class="browse" style="display:none;" class="row">
-                       <h2>Student</h2>
-                       <div id="browseStudent">
-
-                       </div>
-                       <h2>Party</h2>
-                       <div id="browseParty">
-
-                       </div>
-                       <h2>National Anthem</h2>
-                       <div id="browseNa">
-
-                       </div>
+                       
                    </div>
                </td>
                <!-- MIDDLE RIGHT -->
